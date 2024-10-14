@@ -1,0 +1,7 @@
+<h1>Сообщения</h1>
+<a href="{% url 'message_create' %}">Добавить новое сообщение</a>
+<ul>
+    {% for message in object_list %}
+        <li>{{ message.subject }} - <a href="{% url 'message_update' message.pk %}">Редактировать</a> - <a href="{% url 'message_delete' message.pk %}">Удалить</a></li>
+    {% endfor %}
+</ul>

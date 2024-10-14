@@ -1,0 +1,7 @@
+<h1>Рассылки</h1>
+<a href="{% url 'mailing_create' %}">Добавить новую рассылку</a>
+<ul>
+    {% for mailing in object_list %}
+        <li>{{ mailing.start_date }} - {{ mailing.frequency }} - <a href="{% url 'mailing_update' mailing.pk %}">Редактировать</a> - <a href="{% url 'mailing_delete' mailing.pk %}">Удалить</a></li>
+    {% endfor %}
+</ul>
