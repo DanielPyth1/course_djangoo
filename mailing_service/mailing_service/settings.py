@@ -77,8 +77,12 @@ WSGI_APPLICATION = 'mailing_service.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'mailing_service_db',
+        'USER': 'mailing_service_user',
+        'PASSWORD': 'RaD960oN',
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
 
@@ -124,3 +128,12 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 DATETIME_INPUT_FORMATS = ['%Y-%m-%d %H:%M:%S', '%d/%m/%Y %H:%M']
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
+EMAIL_HOST_USER = 'danieelpark@gmail.com'
+EMAIL_HOST_PASSWORD = 'RaD960oN'
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
