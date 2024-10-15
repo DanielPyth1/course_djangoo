@@ -21,5 +21,5 @@ from django.http import HttpResponseRedirect
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('mailing/', include('mailing.urls')),
-    path('', lambda request: HttpResponseRedirect('/mailing/clients/')),  # Перенаправление на список клиентов
+    path('', lambda request: HttpResponseRedirect('/mailing/clients/')),
 ]
