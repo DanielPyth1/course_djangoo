@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>Client List (Manager View)</h2>
+    <ul>
+        {% for client in object_list %}
+            <li>{{ client.full_name }} ({{ client.email }})</li>
+        {% empty %}
+            <li>No clients found.</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

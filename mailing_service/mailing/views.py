@@ -91,6 +91,8 @@ class MailingListView(LoginRequiredMixin, ListView):
     template_name = 'mailing_list.html'
 
     def get_queryset(self):
+        if self.request.user.groups.filter(name='Manager').exists():
+            return Mailing.objects.all()
         return Mailing.objects.filter(owner=self.request.user)
 
 
@@ -124,3 +126,40 @@ class MailingDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     def test_func(self):
         mailing = self.get_object()
         return self.request.user == mailing.owner
+
+class ManagerMailingListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
+    model = Mailing
+    template_name = 'mailing/mailing_list_manager.html'
+
+    def test_func(self):
+        # Проверяем, что пользователь является менеджером
+        return self.request.user.groups.filter(name='Manager').exists()
+
+    def get_queryset(self):
+        # Менеджер видит все рассылки
+        return Mailing.objects.all()
+
+
+class ManagerClientListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
+    model = Client
+    template_name = 'mailing/client_list_manager.html'
+
+    def test_func(self):
+        # Проверяем, что пользователь является менеджером
+        return self.request.user.groups.filter(name='Manager').exists()
+
+    def get_queryset(self):
+        # Менеджер видит всех клиентов
+        return Client.objects.all()
+
+
+class ManagerMessageListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
+    model = Message
+    template_name = 'mailing/message_list_manager.html'
+
+    def test_func(self):
+        # Проверяем, что пользователь является менеджером
+        return self.request.user.groups.filter(name='Manager').exists()
+
+    def get_queryset(self):
+        return Message.objects.all()

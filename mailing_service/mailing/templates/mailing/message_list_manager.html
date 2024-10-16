@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>Message List (Manager View)</h2>
+    <ul>
+        {% for message in object_list %}
+            <li>{{ message.subject }} - {{ message.body }}</li>
+        {% empty %}
+            <li>No messages found.</li>
+        {% endfor %}
+    </ul>
+{% endblock %}
