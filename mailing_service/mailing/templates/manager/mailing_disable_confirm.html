@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Отключить рассылку: {{ object.name }}?</h2>
+<form method="post">
+    {% csrf_token %}
+    <button type="submit">Отключить</button>
+</form>
+{% endblock %}

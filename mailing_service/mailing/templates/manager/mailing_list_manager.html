@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>All Mailings (Manager View)</h2>
+<ul>
+    {% for mailing in object_list %}
+    <li>
+        {{ mailing.start_date }} - {{ mailing.status }}
+        {% if mailing.is_active %}
+            <a href="{% url 'manager_mailing_disable' mailing.pk %}">Отключить</a>
+        {% else %}
+            (Отключено)
+        {% endif %}
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}

@@ -3,6 +3,35 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from .models import Client, Message, Mailing
 from .forms import ClientForm, MessageForm, MailingForm
+from django.contrib.auth import get_user_model
+from django.shortcuts import get_object_or_404, redirect
+
+User = get_user_model()
+
+
+class ManagerUserListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
+    model = User
+    template_name = 'manager/user_list.html'
+
+    def test_func(self):
+        return self.request.user.groups.filter(name='Manager').exists()
+
+
+class ManagerUserBlockView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = User
+    fields = ['is_active']
+    template_name = 'manager/user_block_confirm.html'
+    success_url = reverse_lazy('manager_user_list')
+
+    def test_func(self):
+        return self.request.user.groups.filter(name='Manager').exists()
+
+    def post(self, request, *args, **kwargs):
+        user = get_object_or_404(User, pk=kwargs['pk'])
+        user.is_active = False  # Блокируем пользователя
+        user.save()
+        return redirect('manager_user_list')
+
 
 # Клиенты
 class ClientListView(LoginRequiredMixin, ListView):
@@ -45,6 +74,7 @@ class ClientDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         client = self.get_object()
         return self.request.user == client.owner  # Проверяем, что пользователь владелец
 
+
 # Сообщения
 class MessageListView(LoginRequiredMixin, ListView):
     model = Message
@@ -84,6 +114,7 @@ class MessageDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     def test_func(self):
         message = self.get_object()
         return self.request.user == message.owner
+
 
 # Рассылки
 class MailingListView(LoginRequiredMixin, ListView):
@@ -127,9 +158,10 @@ class MailingDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         mailing = self.get_object()
         return self.request.user == mailing.owner
 
+
 class ManagerMailingListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
     model = Mailing
-    template_name = 'mailing/mailing_list_manager.html'
+    template_name = 'manager/mailing_list_manager.html'
 
     def test_func(self):
         # Проверяем, что пользователь является менеджером
@@ -163,3 +195,19 @@ class ManagerMessageListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
 
     def get_queryset(self):
         return Message.objects.all()
+
+
+class ManagerMailingDisableView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = Mailing
+    fields = ['is_active']
+    template_name = 'manager/mailing_disable_confirm.html'
+    success_url = reverse_lazy('manager_mailing_list')
+
+    def test_func(self):
+        return self.request.user.groups.filter(name='Manager').exists()
+
+    def post(self, request, *args, **kwargs):
+        mailing = get_object_or_404(Mailing, pk=kwargs['pk'])
+        mailing.is_active = False  # Отключаем рассылку
+        mailing.save()
+        return redirect('manager_mailing_list')

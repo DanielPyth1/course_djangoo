@@ -16,14 +16,18 @@ class Message(models.Model):
 
 
 class Mailing(models.Model):
+    # Другие поля
     start_date = models.DateTimeField()
     frequency = models.CharField(max_length=50, choices=[('daily', 'Раз в день'), ('weekly', 'Раз в неделю'),
                                                          ('monthly', 'Раз в месяц')])
     status = models.CharField(max_length=50,
                               choices=[('created', 'Создана'), ('started', 'Запущена'), ('finished', 'Завершена')])
-    message = models.ForeignKey(Message, on_delete=models.CASCADE)
-    clients = models.ManyToManyField(Client)
+    message = models.ForeignKey('Message', on_delete=models.CASCADE)
+    clients = models.ManyToManyField('Client')
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+
+    # Новое поле для деактивации рассылки
+    is_active = models.BooleanField(default=True)
 
 
 class Attempt(models.Model):

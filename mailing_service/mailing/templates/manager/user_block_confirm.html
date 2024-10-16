@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Вы уверены, что хотите заблокировать {{ object.username }}?</h2>
+<form method="post">
+    {% csrf_token %}
+    <button type="submit">Заблокировать</button>
+</form>
+{% endblock %}

@@ -2,8 +2,9 @@ from django.urls import path
 from .views import (
     ClientListView, ClientCreateView, ClientUpdateView, ClientDeleteView,
     MessageListView, MessageCreateView, MessageUpdateView, MessageDeleteView,
-    MailingListView, MailingCreateView, MailingUpdateView, MailingDeleteView, ManagerMailingListView,
-    ManagerMessageListView, ManagerClientListView
+    MailingListView, MailingCreateView, MailingUpdateView, MailingDeleteView,
+    ManagerMailingListView, ManagerMessageListView, ManagerClientListView,
+    ManagerUserListView, ManagerUserBlockView, ManagerMailingDisableView  # Включаем новые представления
 )
 
 urlpatterns = [
@@ -27,4 +28,9 @@ urlpatterns = [
     path('mailings/<int:pk>/update/', MailingUpdateView.as_view(), name='mailing_update'),
     path('mailings/<int:pk>/delete/', MailingDeleteView.as_view(), name='mailing_delete'),
     path('manager/mailings/', ManagerMailingListView.as_view(), name='manager_mailing_list'),
+
+    # Менеджер - пользователи
+    path('manager/users/', ManagerUserListView.as_view(), name='manager_user_list'),
+    path('manager/users/<int:pk>/block/', ManagerUserBlockView.as_view(), name='manager_user_block'),
+    path('manager/mailings/<int:pk>/disable/', ManagerMailingDisableView.as_view(), name='manager_mailing_disable'),
 ]

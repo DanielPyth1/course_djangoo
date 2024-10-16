@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Список пользователей</h2>
+<ul>
+    {% for user in object_list %}
+    <li>{{ user.username }} - {{ user.email }} - {% if user.is_active %} Активен {% else %} Заблокирован {% endif %}
+        <a href="{% url 'manager_user_block' user.pk %}">Заблокировать</a>
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}
