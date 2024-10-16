@@ -13,5 +13,5 @@ urlpatterns = [
     path('manager/mailings/', ManagerMailingListView.as_view(), name='manager_mailing_list'),
     path('manager/messages/', ManagerMessageListView.as_view(), name='manager_message_list'),
     path('manager/clients/', ManagerClientListView.as_view(), name='manager_client_list'),
-    path('', TemplateView.as_view(template_name='home.html'), name='home'),  # Главная страница
+    path('', TemplateView.as_view(template_name='home.html'), name='home'),
 ]

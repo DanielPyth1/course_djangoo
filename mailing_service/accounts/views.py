@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-from django.utils.encoding import force_bytes, force_str  # исправляем на force_str для Django 5.1
+from django.utils.encoding import force_bytes, force_str
 from django.contrib.auth import get_user_model
 from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
@@ -13,19 +13,16 @@ from .forms import CustomUserCreationForm
 from .tokens import account_activation_token
 from django.contrib import messages
 
-# Вью для регистрации пользователя
 class SignUpView(CreateView):
     form_class = CustomUserCreationForm
     success_url = reverse_lazy('login')
     template_name = 'registration/signup.html'
 
     def form_valid(self, form):
-        # Сохраняем пользователя, но не активируем его
         user = form.save(commit=False)
         user.is_active = False
         user.save()
 
-        # Отправка письма с подтверждением
         current_site = get_current_site(self.request)
         mail_subject = 'Активируйте ваш аккаунт'
         message = render_to_string('registration/account_activation_email.html', {
@@ -53,7 +50,7 @@ def activate(request, uidb64, token):
         user.save()
         login(request, user)
         messages.success(request, 'Ваш аккаунт успешно активирован!')
-        return redirect('home')  # Измените на URL вашей домашней страницы
+        return redirect('home')
     else:
         messages.error(request, 'Ссылка активации недействительна!')
         return render(request, 'registration/activation_invalid.html')
