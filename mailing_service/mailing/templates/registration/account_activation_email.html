@@ -1,0 +1,5 @@
+{% block content %}
+Привет {{ user.username }},
+Пожалуйста, перейдите по ссылке ниже для активации вашего аккаунта:
+http://{{ domain }}{% url 'activate' uidb64=uid token=token %}
+{% endblock %}
