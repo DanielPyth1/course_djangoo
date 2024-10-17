@@ -1,17 +1,29 @@
 {% extends "base.html" %}
+{% load cache %}
 
 {% block content %}
     <h1>Welcome to the Mailing Service</h1>
+
+    {% cache 900 total_mailings %}
     <p>Total Mailings: {{ total_mailings }}</p>
+    {% endcache %}
+
+    {% cache 900 active_mailings %}
     <p>Active Mailings: {{ active_mailings }}</p>
+    {% endcache %}
+
+    {% cache 900 unique_clients %}
     <p>Unique Clients: {{ unique_clients }}</p>
+    {% endcache %}
 
     <h2>Latest Blog Posts</h2>
     <ul>
+        {% cache 900 blog_posts %}
         {% for post in blog_posts %}
         <li><a href="{% url 'blog_detail' post.pk %}">{{ post.title }}</a></li>
         {% empty %}
         <li>No blog posts available.</li>
         {% endfor %}
+        {% endcache %}
     </ul>
 {% endblock %}

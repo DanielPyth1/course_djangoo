@@ -1,6 +1,7 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.db.models import Count
 from django.urls import reverse_lazy
+from django.views.decorators.cache import cache_page
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from .models import Client, Message, Mailing
 from .forms import ClientForm, MessageForm, MailingForm
@@ -9,6 +10,8 @@ from django.shortcuts import get_object_or_404, redirect
 from blog.models import BlogPost
 import random
 from django.shortcuts import render
+from django.core.cache import cache
+
 
 User = get_user_model()
 
@@ -210,7 +213,7 @@ class ManagerMailingDisableView(LoginRequiredMixin, UserPassesTestMixin, UpdateV
         mailing.save()
         return redirect('manager_mailing_list')
 
-
+@cache_page(60 * 15)
 def home_view(request):
     total_mailings = Mailing.objects.count()
 
