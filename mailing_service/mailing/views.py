@@ -1,10 +1,14 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.db.models import Count
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from .models import Client, Message, Mailing
 from .forms import ClientForm, MessageForm, MailingForm
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404, redirect
+from blog.models import BlogPost
+import random
+from django.shortcuts import render
 
 User = get_user_model()
 
@@ -205,3 +209,23 @@ class ManagerMailingDisableView(LoginRequiredMixin, UserPassesTestMixin, UpdateV
         mailing.is_active = False
         mailing.save()
         return redirect('manager_mailing_list')
+
+
+def home_view(request):
+    total_mailings = Mailing.objects.count()
+
+    active_mailings = Mailing.objects.filter(is_active=True).count()
+
+    unique_clients = Client.objects.aggregate(total_clients=Count('email', distinct=True))['total_clients']
+
+    blog_posts = list(BlogPost.objects.all())
+    random_blog_posts = random.sample(blog_posts, min(3, len(blog_posts)))
+
+    context = {
+        'total_mailings': total_mailings,
+        'active_mailings': active_mailings,
+        'unique_clients': unique_clients,
+        'blog_posts': random_blog_posts,
+    }
+
+    return render(request, 'home.html', context)
