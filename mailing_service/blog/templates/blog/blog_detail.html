@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>{{ blog_post.title }}</h1>
+  <img src="{{ blog_post.image.url }}" alt="{{ blog_post.title }}" style="max-width: 300px;">
+  <p>{{ blog_post.content }}</p>
+  <p><strong>Views:</strong> {{ blog_post.views }} | <strong>Published on:</strong> {{ blog_post.created_at }}</p>
+{% endblock %}

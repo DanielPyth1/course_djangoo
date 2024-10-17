@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>Blog</h1>
+  <ul>
+    {% for post in blog_posts %}
+      <li>
+        <a href="{% url 'blog_detail' post.pk %}" style="font-size: 24px;">{{ post.title }}</a>
+      </li>
+    {% empty %}
+      <p>No blog posts available.</p>
+    {% endfor %}
+  </ul>
+{% endblock %}
