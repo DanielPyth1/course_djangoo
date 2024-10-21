@@ -166,4 +166,5 @@ database.ini
 __pycache__
 
 # Ignore environment variables file
-.env
+mailing_service/.env
+
